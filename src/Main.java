@@ -1,7 +1,7 @@
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
- 
+
 import java.nio.ByteBuffer;
  
 import static org.lwjgl.glfw.Callbacks.*;
@@ -96,7 +96,7 @@ public class Main {
 	 
 	        // Run the rendering loop until the user has attempted to close
 	        // the window or has pressed the ESCAPE key.
-	        while ( glfwWindowShouldClose(window) == GL_FALSE ) {
+	        while ( glfwWindowShouldClose(window) == GL_FALSE) {
 	            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 	 
 	            glfwSwapBuffers(window); // swap the color buffers
@@ -105,5 +105,11 @@ public class Main {
 	            // invoked during this call.
 	            glfwPollEvents();
 	        }
-
-}
+	        
+	        }
+	    
+	    public static void main(String[] args){
+	    	Main main = new Main();
+	    	main.run();
+	    }
+    }
