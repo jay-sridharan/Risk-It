@@ -24,6 +24,7 @@ public class Game {
 	private GLFWKeyCallback keyCallback;
 	// The window handle
 	private long window;
+	private Texture texture;
 
 	public Game() {
 
@@ -94,6 +95,8 @@ public class Game {
 		glfwMakeContextCurrent(window);
 		// Enable v-sync
 		glfwSwapInterval(1);
+		glEnable(GL_TEXTURE_2D);
+		texture = loadTexture("menuTexture","png");
 
 		// Make the window visible
 		glfwShowWindow(window);
@@ -108,7 +111,6 @@ public class Game {
 		GLContext.createFromCurrent();
 
 		float color = (float) 0.2431372549019608;
-		Texture texture = loadTexture("menuTexture","png");
 		
 		// Set the clear color
 		glClearColor(color, color, color, 1.0f);
@@ -124,6 +126,8 @@ public class Game {
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
+			
+			texture.bind();
 		}
 
 	}
