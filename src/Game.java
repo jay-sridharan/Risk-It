@@ -1,149 +1,72 @@
-import org.lwjgl.Sys;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
+import java.io.IOException;
+
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.*;
-
+import org.newdawn.slick.util.ResourceLoader;
 /**
  * @author jsridha2
  *
  */
 public class Game {
-	private GLFWErrorCallback errorCallback;
-	private GLFWKeyCallback keyCallback;
-	// The window handle
-	private long window;
-	private Texture texture;
-
+	Texture texture;
 	public Game() {
-
-		System.out.println("Hello LWJGL " + Sys.getVersion() + "!");
-
-		try {
-			init();
-			loop();
-
-			// Release window and window callbacks
-			glfwDestroyWindow(window);
-			keyCallback.release();
-		} finally {
-			// Terminate GLFW and release the GLFWerrorfun
-			glfwTerminate();
-			errorCallback.release();
-		}
-	}
-
-	private void init() {
-		// Setup an error callback. The default implementation
-		// will print the error message in System.err.
-		glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
-
-		// Initialize GLFW. Most GLFW functions will not work before doing this.
-		if (glfwInit() != GL11.GL_TRUE) {
-			throw new IllegalStateException("Unable to initialize GLFW");
-		}
-
-		// Configure our window
-		glfwDefaultWindowHints(); // optional, the current window hints are
-									// already the default
-		glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden
-												// after creation
-		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
-
 		
-		// Get the resolution of the primary monitor
-		ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		int WIDTH = (int) Math.floor((GLFWvidmode.width(vidmode)) * 0.75);
-		int HEIGHT = (int) Math.floor((GLFWvidmode.height(vidmode)) * 0.75);
-
-		// Create the window
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Risk It!", NULL, NULL);
-		if (window == NULL)
-			throw new RuntimeException("Failed to create the GLFW window");
-
-		// Setup a key callback. It will be called every time a key is pressed,
-		// repeated or released.
-		glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
-			@Override
-			public void invoke(long window, int key, int scancode, int action,
-					int mods) {
-				if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-					glfwSetWindowShouldClose(window, GL_TRUE); // We will detect
-																// this in our
-																// rendering
-																// loop
-			}
-		});
-
-	
-		// Center our window
-		glfwSetWindowPos(window, (GLFWvidmode.width(vidmode) - WIDTH) / 2,
-				(GLFWvidmode.height(vidmode) - HEIGHT) / 2);
-
-		// Make the OpenGL context current
-		glfwMakeContextCurrent(window);
-		// Enable v-sync
-		glfwSwapInterval(1);
-		glEnable(GL_TEXTURE_2D);
-		texture = loadTexture("menuTexture","png");
-
-		// Make the window visible
-		glfwShowWindow(window);
-	}
-
-	private void loop() {
-		// This line is critical for LWJGL's interoperation with GLFW's
-		// OpenGL context, or any context that is managed externally.
-		// LWJGL detects the context that is current in the current thread,
-		// creates the ContextCapabilities instance and makes the OpenGL
-		// bindings available for use.
-		GLContext.createFromCurrent();
-
-		float color = (float) 0.2431372549019608;
-		
-		// Set the clear color
-		glClearColor(color, color, color, 1.0f);
-
-		// Run the rendering loop until the user has attempted to close
-		// the window or has pressed the ESCAPE key.
-		while (glfwWindowShouldClose(window) == GL_FALSE) {
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the
-																// framebuffer
-
-			glfwSwapBuffers(window); // swap the color buffers
-
-			// Poll for window events. The key callback above will only be
-			// invoked during this call.
-			glfwPollEvents();
-			
-			texture.bind();
-		}
-
-	}
-
-	private Texture loadTexture(String id, String type){
 		try {
-			return TextureLoader.getTexture("PNG",new FileInputStream(new File("util/img/menu" + id + "." + type)));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+			Display.setDisplayMode(Display.getDesktopDisplayMode());
+			Display.setFullscreen(true);
+			Display.create();
 
+			Display.setVSyncEnabled(true);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		try {
+			 GL11.glEnable(GL11.GL_TEXTURE_2D);      
+			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("util/img/menuTexture.png"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0, 800, 0, 600, 1, -1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glMatrixMode(GL11.GL_TEXTURE);
+		GL11.glLoadIdentity(); // Make sure we are starting from the identity matrix.
+		System.out.println(texture.getImageWidth());
+		System.out.println(texture.getImageHeight());
+		GL11.glScalef(texture.getImageWidth() / Display.getWidth(),texture.getImageHeight() / Display.getHeight(),1);
+
+		while (!Display.isCloseRequested()) {
+
+			// render OpenGL here
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+			// set the color of the quad (R,G,B,A)
+			GL11.glColor3f(0.5f, 0.5f, 1.0f);
+		    Color.white.bind();
+	        texture.bind(); // or GL11.glBind(texture.getTextureID());
+			// draw quad
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(0,0);
+            GL11.glVertex2f(0,0);
+            GL11.glTexCoord2f(1,0);
+            GL11.glVertex2f(Display.getWidth(),0);
+            GL11.glTexCoord2f(1,1);
+            GL11.glVertex2f(Display.getWidth(),Display.getHeight());
+            GL11.glTexCoord2f(0,1);
+            GL11.glVertex2f(0,Display.getHeight());
+			GL11.glEnd();
+			Display.update();
+		}
+
+		Display.destroy();
 	}
-	
+
 }
