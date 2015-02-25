@@ -41,7 +41,7 @@ public class Game {
 		GL11.glLoadIdentity(); // Make sure we are starting from the identity matrix.
 		System.out.println(texture.getImageWidth());
 		System.out.println(texture.getImageHeight());
-		GL11.glScalef(texture.getImageWidth() / Display.getWidth(),texture.getImageHeight() / Display.getHeight(),1);
+		GL11.glScalef(2.25f,0.95f,1f); //Test for Other monitors
 
 		while (!Display.isCloseRequested()) {
 
