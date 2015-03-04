@@ -147,6 +147,9 @@ public class Game {
 				if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
 					this.destroy();
 				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_S) {
+					this.destroy();
+				}
 			}
 		}
 	}

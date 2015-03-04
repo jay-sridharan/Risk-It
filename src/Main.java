@@ -2,7 +2,7 @@ public class Main {
 
 	@SuppressWarnings("unused")
 	public Main() {
-		Game game = new Game();
+		NiftyGame game = new NiftyGame();
 	}
 
 	@SuppressWarnings("unused")
