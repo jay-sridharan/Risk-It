@@ -17,6 +17,8 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 
+
+
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
@@ -30,11 +32,15 @@ public class NiftyGame {
   private static final int WIDTH = 1024;
   private static final int HEIGHT = 768;
 
-  public NiftyGame(
+public NiftyGame(
 		  final RenderDevice newRenderDevice,
 		  final SoundDevice newSoundDevice,
 		  final InputSystem newInputSystem,
-		  final TimeProvider newTimeProvider) {
+		  final TimeProvider newTimeProvider) throws Exception {
+	
 }
+
+
+
 
 }
