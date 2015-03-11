@@ -13,8 +13,10 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 public class DrawHex {
-	
-	
+	private x;
+	private y;
+	private a;
+	private b
 	
 	public void start() {
 		displayMode = Display.getDesktopDisplayMode();
@@ -43,19 +45,18 @@ public class DrawHex {
 		Color.white.bind();
 		texture.bind(); // or GL11.glBind(texture.getTextureID());
 		// draw quad
-		GL11.glBegin(GL11.GL_Polygon);
-		GL11.glVertex2f(0, 10);
-		GL11.glVertex2f(5, 0);
-		GL11.glVertex2f(15, 0);
-		GL11.glVertex2f(20, 10);
-		GL11.glVertex2f(15, 20);
-		GL11.glVertex2f(5, 20);
+		while a < 10;
+			x = a * 20
+			while b < 10	
+				GL11.glBegin(GL11.GL_Polygon);
+				GL11.glVertex2f(x, y+10);
+				GL11.glVertex2f(x+5, y+0);
+				GL11.glVertex2f(15, 0);
+				GL11.glVertex2f(20, 10);
+				GL11.glVertex2f(15, 20);
+				GL11.glVertex2f(5, 20);
 		GL11.glEnd();
 		Color.white.bind();
-
-		font.drawString(100, 50, "THE LIGHTWEIGHT JAVA GAMES LIBRARY",
-				Color.yellow);
-		font2.drawString(100, 100, "NICE LOOKING FONTS!", Color.green);
 	}
 
 	/**
