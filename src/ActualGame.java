@@ -47,14 +47,17 @@ public class DrawHex {
 		// draw quad
 		while a < 10;
 			x = a * 20
-			while b < 10	
+			while b < 10
+			y = b * 20
 				GL11.glBegin(GL11.GL_Polygon);
-				GL11.glVertex2f(x, y+10);
-				GL11.glVertex2f(x+5, y+0);
-				GL11.glVertex2f(15, 0);
-				GL11.glVertex2f(20, 10);
-				GL11.glVertex2f(15, 20);
-				GL11.glVertex2f(5, 20);
+				GL11.glVertex2f(x, y + 10);
+				GL11.glVertex2f(x + 5, y);
+				GL11.glVertex2f(x + 15, y);
+				GL11.glVertex2f(x + 20, y + 10);
+				GL11.glVertex2f(x + 15, y + 20);
+				GL11.glVertex2f(x + 5, y + 20);
+			b = b + 1
+		a = a + 1
 		GL11.glEnd();
 		Color.white.bind();
 	}
