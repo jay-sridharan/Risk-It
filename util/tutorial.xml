@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+   <useStyles filename="nifty-default-styles.xml" />
+   <useControls filename="nifty-default-controls.xml" />
+   <screen id="start">
+      <layer id="background" childLayout="center">
+         <image filename="util/img/menuTexture.png" />
+      </layer>
+      <layer id="background" childLayout="center">
+         <image align="center" height="80%" width="60%" filename="util/img/title.png" />
+      </layer>
+   </screen>
+</nifty>
