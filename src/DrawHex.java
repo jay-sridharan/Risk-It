@@ -13,15 +13,14 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 public class DrawHex {
-	private x;
-	private y;
-	private a;
-	private b
-	
+	private int x;
+	private int y;
+	private int a;
+	private int b;
 	public void start() {
-		displayMode = Display.getDesktopDisplayMode();
-		initGL();
-		init();
+		DisplayMode displayMode = Display.getDesktopDisplayMode();
+		//initGL();
+		//init();
 
 		while (true) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
@@ -43,24 +42,30 @@ public class DrawHex {
 		// set the color of the quad (R,G,B,A)
 		GL11.glColor3f(0.5f, 0.5f, 1.0f);
 		Color.white.bind();
-		texture.bind(); // or GL11.glBind(texture.getTextureID());
+		//texture.bind(); // or GL11.glBind(texture.getTextureID());
 		// draw quad
-		while a < 10;
-			x = a * 20
-			while b < 10
-			y = b * 20
-				GL11.glBegin(GL11.GL_Polygon);
-				GL11.glVertex2f(x, y + 10);
-				GL11.glVertex2f(x + 5, y);
-				GL11.glVertex2f(x + 15, y);
-				GL11.glVertex2f(x + 20, y + 10);
-				GL11.glVertex2f(x + 15, y + 20);
-				GL11.glVertex2f(x + 5, y + 20);
-			b = b + 1
-		a = a + 1
-		GL11.glEnd();
-		Color.white.bind();
-	}
+		while (a < 10){
+			x = a * 20;
+			while (b<10){
+				y = b * 20;
+						//GL11.glBegin(GL11.GL_POLYGON);
+						GL11.glVertex2f(x, y + 10);
+						GL11.glVertex2f(x + 5, y);
+						GL11.glVertex2f(x + 15, y);
+						GL11.glVertex2f(x + 20, y + 10);
+						GL11.glVertex2f(x + 15, y + 20);
+						GL11.glVertex2f(x + 5, y + 20);
+					b = b + 1;
+				a = a + 1;
+				GL11.glEnd();
+				Color.white.bind();
+			}
+			
+		}
+		
+			
+
+
 
 	/**
 	 * Main method
