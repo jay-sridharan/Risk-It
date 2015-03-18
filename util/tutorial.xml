@@ -6,8 +6,9 @@
       <layer id="background" childLayout="center">
          <image filename="util/img/menuTexture.png" />
       </layer>
-      <layer id="background" childLayout="center">
+      <layer id="title" childLayout="center">
          <image align="center" valign="top" height="20%" width="80%" filename="util/img/title.png" />
+         <image align="center" valign="bottom" height="20%" width="80%" filename="util/img/start game.png" />
       </layer>
    </screen>
 </nifty>
