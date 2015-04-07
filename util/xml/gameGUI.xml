@@ -1,18 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty>
-   <useStyles filename="nifty-default-styles.xml" />
-   <useControls filename="nifty-default-controls.xml" />
-   <screen id="start">
-      <layer id="background" childLayout="center">
-         <image filename="util/img/menuTexture.png" />
-      </layer>
-      <layer id="title" childLayout="vertical">
-         <image align="center" height="20%" width="80%" filename="util/img/title.png" />
-         <panel id="subactions" childLayout="absolute" marginTop="40%" height="15%">
-         <image align="left" height="100%" width="30%" x="0px" y="0px" filename="util/img/rules.png" />	
-         <image align="right" height="100%" width="30%" x="70%" y="0px" filename="util/img/exit.png" />
-         </panel>
-         <image align="center" height="20%" width="80%" filename="util/img/start game.png" />
-      </layer>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+    <useStyles filename="nifty-default-styles.xml" />
+    <useControls filename="nifty-default-controls.xml" />
+    <screen id="start" controller="StartScreen">
+        <layer id="background" childLayout="center">
+            <image filename="util/img/menuTexture.png" />
+        </layer>
+        <layer id="title" childLayout="vertical">
+            <image align="center" height="20%" width="80%" filename="util/img/title.png" />
+            <panel id="subactions" childLayout="absolute" marginTop="40%" height="13%">
+                <image align="left" height="100%" width="30%" x="0px" y="0px" filename="util/img/rules.png">
+                    <interact onClick="showRules()" />
+                </image>
+                <image align="right" height="100%" width="30%" x="70%" y="0px" filename="util/img/exit.png">
+                    <interact onClick="exitGame()" />
+                </image>
+            </panel>
+            <image align="center" height="20%" width="80%" filename="util/img/start game.png" marginTop="5%">
+                <interact onClick="startGame()" />
+            </image>
+        </layer>
+    </screen>
+    <screen id="rules" controller="StartScreen">
+        <layer id="background" childLayout="center">
+            <image filename="util/img/menuTexture.png" />
+        </layer>
+        <layer id="transparent" backgroundColor="#D1D1D1A7" childLayout="vertical">
+            <panel id="rulesPanel" childLayout="center">
+                <image filename="util/img/game rules.png" width="100%" height="100%" />
+            </panel>
+            <panel id="goToStartPanel" childLayout="center" width="100%" height="13%">
+                <image height="100%" filename="util/img/exit.png">
+                    <interact onClick="goToStartScreen()" />
+                </image>
+            </panel>
+        </layer>
+    </screen>
+    
+   <screen id="game">
+   
+   <layer id="map" childLayout="absolute">
+                   <image height="10%" width="9%" x="10%" y="10%" filename="util/img/bluehex.png" />
+                   <image height="10%" width="9%" x="10%" y="20%" filename="util/img/yellowhex.png" />
+                   
+                   <image height="10%" width="9%" x="16.8%" y="15%" filename="util/img/greenhex.png" />
+   
+   </layer>
+   
+   
+   
    </screen>
+    
+    
+    
 </nifty>

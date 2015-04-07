@@ -236,8 +236,8 @@ public class LwjglInitHelper {
       if (callback != null) {
         callback.process();
       }
-
-      // show render
+      
+     // show render
       Display.update();
 
       if (nifty.update()) {
