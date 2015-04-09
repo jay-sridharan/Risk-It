@@ -37,13 +37,9 @@
         </layer>
     </screen>
     
-   <screen id="game">
+   <screen id="game" controller="MapScreen">
    
-   <layer id="map" childLayout="absolute">
-                   <image height="10%" width="9%" x="10%" y="10%" filename="util/img/bluehex.png" />
-                   <image height="10%" width="9%" x="10%" y="20%" filename="util/img/yellowhex.png" />
-                   
-                   <image height="10%" width="9%" x="16.8%" y="15%" filename="util/img/greenhex.png" />
+   <layer id="map" childLayout="absolute" backgroundColor="#C0C0C0" >
    
    </layer>
    
