@@ -17,21 +17,21 @@ public class MapScreen implements ScreenController {
     private String lastHover = "hex1";
     private String colors[] = {
         "util/img/hexes/blue.png",
-        "util/img/hexes/yellow.png",
+        "util/img/hexes/brown.png",
         "util/img/hexes/green.png",
-        "util/img/hexes/purple.png",
+        "util/img/hexes/pink.png",
     "util/img/hexes/black.png" };
     private String hovers[] = {
         "util/img/hexes/bluehover.png",
-        "util/img/hexes/yellowhover.png",
+        "util/img/hexes/brownhover.png",
         "util/img/hexes/greenhover.png",
-        "util/img/hexes/purplehover.png",
+        "util/img/hexes/pinkhover.png",
     "util/img/hexes/blackhover.png" };
     private String colornames[] = {
         "blue",
-        "yellow",
+        "brown",
         "green",
-        "purple",
+        "pink",
     "black" };
     private String nums[] = {
         "util/img/nums/1.png",
@@ -71,11 +71,20 @@ public class MapScreen implements ScreenController {
         String color = (String) hextable.get(elementID);
         String path = "util/img/hexes/" + color +".png";
         if((path.equals(colors[curPlayer - 1])&& curAction == "Select")){
-
             path = "util/img/hexes/" + color + "click.png";
             replaceImage(elementID,path);
             clicked[0] = elementID;
             curAction = "Attack";
+        }
+        else if((path.equals(colors[curPlayer -1]) && curAction == "Attack")){
+        	System.out.println("FIRST IF");
+        	if(elementID.equals(clicked[0])){
+        		System.out.println("SECOND IF");
+        		path = "util/img/hexes/" + color + ".png";
+                replaceImage(elementID,path);
+                clicked[0] = "";
+                curAction = "Select";
+        	}
         }
         else if((!path.equals(colors[curPlayer -1]) && curAction == "Attack")){
             String[] surrounding = getSurroundingTerritories(clicked[0]);
@@ -95,7 +104,7 @@ public class MapScreen implements ScreenController {
         int startingnum = Integer.parseInt(elementID.substring(3, elementID.length()));
         String[] availibleHexes = new String[6];
 
-        if(startingnum % 8 >1){
+        if(startingnum % mapHeight > 1 && Math.ceil(startingnum/mapHeight) % 2 == 0){
             availibleHexes[0] = "hex" + Integer.toString(startingnum + 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum - 1);
             availibleHexes[2] = "hex" + Integer.toString(startingnum + mapHeight);
@@ -103,24 +112,32 @@ public class MapScreen implements ScreenController {
             availibleHexes[4] = "hex" + Integer.toString(startingnum - mapHeight);
             availibleHexes[5] = "hex" + Integer.toString(startingnum - mapHeight -1);
         }
-        else if(startingnum % 8 == 1 && Math.ceil(startingnum/8) % 2 == 0){
+        else if(startingnum % mapHeight > 1 && Math.ceil(startingnum/mapHeight) % 2 == 1){
+            availibleHexes[0] = "hex" + Integer.toString(startingnum + 1);
+            availibleHexes[1] = "hex" + Integer.toString(startingnum - 1);
+            availibleHexes[2] = "hex" + Integer.toString(startingnum + mapHeight);
+            availibleHexes[3] = "hex" + Integer.toString(startingnum + mapHeight +1);
+            availibleHexes[4] = "hex" + Integer.toString(startingnum - mapHeight);
+            availibleHexes[5] = "hex" + Integer.toString(startingnum - mapHeight +1);
+        }
+        else if(startingnum % mapHeight == 1 && Math.ceil(startingnum/mapHeight) % 2 == 0){
             availibleHexes[0] = "hex" + Integer.toString(startingnum + 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
-            availibleHexes[2] = "hex" + Integer.toString(startingnum + mapHeight -1);
+            availibleHexes[2] = "hex" + Integer.toString(startingnum + mapHeight +1);
             availibleHexes[3] = "hex" + Integer.toString(startingnum - mapHeight);
             availibleHexes[4] = "hex" + Integer.toString(startingnum - mapHeight -1);
         }
-        else if(startingnum % 8 == 1 && Math.ceil(startingnum/8) % 2 == 1){
+        else if(startingnum % mapHeight == 1 && Math.ceil(startingnum/mapHeight) % 2 == 1){
             availibleHexes[0] = "hex" + Integer.toString(startingnum + 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
             availibleHexes[2] = "hex" + Integer.toString(startingnum - mapHeight);
         }
-        else if(startingnum % 8 == 0 && Math.ceil(startingnum/8) % 2 == 0){
+        else if(startingnum % mapHeight == 0 && Math.ceil(startingnum/mapHeight) % 2 == 0){
             availibleHexes[0] = "hex" + Integer.toString(startingnum - 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
             availibleHexes[2] = "hex" + Integer.toString(startingnum - mapHeight);
         }
-        else if(startingnum % 8 == 0 && Math.ceil(startingnum/8) % 2 == 1){
+        else if(startingnum % mapHeight == 0 && Math.ceil(startingnum/mapHeight) % 2 == 1){
             availibleHexes[0] = "hex" + Integer.toString(startingnum - 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
             availibleHexes[2] = "hex" + Integer.toString(startingnum + mapHeight -1);
@@ -155,7 +172,7 @@ public class MapScreen implements ScreenController {
     }
     private void drawMap(){
         Element map = screen.findElementByName("map");
-        double colWidth = 13.67;
+        double colWidth = 13.9;
         int counter = 1;
         for (int i = 0; i < mapOddCols; i++) {
             int depth = 1;
@@ -171,7 +188,7 @@ public class MapScreen implements ScreenController {
                         height("80");
                         width("95");
                         x(Double.toString(7.5 + rowpos) + "%");
-                        y(Double.toString((curdepth * 10.0) - 2.5) + "%");
+                        y(Double.toString((curdepth * 10.0) +1) + "%");
                         id("hex" + mycounter);
                         interactOnClick("hexClick(hex" + mycounter + ")");
                         interactOnMouseOver("hexMouseOver(hex" + mycounter + ")");
@@ -184,7 +201,7 @@ public class MapScreen implements ScreenController {
                         height("56");
                         width("52");
                         x(Double.toString(7.5 + 2 + rowpos) + "%");
-                        y(Double.toString((curdepth * 10.0) - 2.5 +1.6) + "%");
+                        y(Double.toString((curdepth * 10.0) +1 +1.6) + "%");
                         id("hexnum" + mycounter);
                         interactOnClick("hexClick(hex" + mycounter + ")");
                     }
@@ -199,7 +216,7 @@ public class MapScreen implements ScreenController {
                 depth++;
             }
         }
-        colWidth = 13.7;
+        colWidth = 13.9;
         counter = 9;
         for (int i = 0; i < mapEvenCols; i++) {
             int depth = 1;
@@ -215,7 +232,7 @@ public class MapScreen implements ScreenController {
                         height("80");
                         width("95");
                         x(Double.toString(16.8 - 2.5 + rowpos) + "%");
-                        y(Double.toString((curdepth * 10.0) + 2.5) + "%");
+                        y(Double.toString((curdepth * 10.0) + 6) + "%");
                         id("hex" + mycounter);
                         interactOnClick("hexClick(hex" + mycounter + ")");
                         interactOnMouseOver("hexMouseOver(hex" + mycounter + ")");
@@ -228,7 +245,7 @@ public class MapScreen implements ScreenController {
                         height("56");
                         width("52");
                         x(Double.toString(16.8 - 2.5 + 2 + rowpos) + "%");
-                        y(Double.toString((curdepth * 10.0) + 2.50 +1.6) + "%");
+                        y(Double.toString((curdepth * 10.0) + 6 +1.6) + "%");
                         id("hexnum" + mycounter);
                         interactOnClick("hexClick(hex" + mycounter + ")");
                     }
@@ -308,4 +325,9 @@ public class MapScreen implements ScreenController {
         image.getRenderer(ImageRenderer.class).setImage(newImage);
     }
     
+    public void nextButtonClick(){
+    	System.out.println("next button");
+    }
+    
+   
 }
