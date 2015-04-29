@@ -1,6 +1,8 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Random;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -26,7 +28,7 @@ public class MapScreen implements ScreenController {
         "util/img/hexes/brownhover.png",
         "util/img/hexes/greenhover.png",
         "util/img/hexes/pinkhover.png",
-    "util/img/hexes/blackhover.png" };
+    	"util/img/hexes/blackhover.png" };
     private String colornames[] = {
         "blue",
         "brown",
@@ -46,6 +48,7 @@ public class MapScreen implements ScreenController {
     private int mapOddCols = 6;
     private int mapEvenCols = 6;
     private int mapHeight = 8;
+    private int deployTerritories = 0;
     @Override
     public void bind(Nifty thisnifty, Screen thisscreen) {
         nifty = thisnifty;
@@ -53,10 +56,10 @@ public class MapScreen implements ScreenController {
     }
     @Override
     public void onStartScreen() {
-        System.out.println("START PROGRAM");
-        drawMap();
         clicked[0] = "";
         clicked[1] = "";
+		nifty.getCurrentScreen().findElementByName("remainingTerritories").hide();
+
     }
     @Override
     public void onEndScreen() {
@@ -77,9 +80,9 @@ public class MapScreen implements ScreenController {
             curAction = "Attack";
         }
         else if((path.equals(colors[curPlayer -1]) && curAction == "Attack")){
-        	System.out.println("FIRST IF");
+//        	System.out.println("FIRST IF");
         	if(elementID.equals(clicked[0])){
-        		System.out.println("SECOND IF");
+//        		System.out.println("SECOND IF");
         		path = "util/img/hexes/" + color + ".png";
                 replaceImage(elementID,path);
                 clicked[0] = "";
@@ -98,6 +101,21 @@ public class MapScreen implements ScreenController {
 
             attackTerritories(clicked[0],clicked[1]);
             curAction = "Select";
+        }
+        else if((path.equals(colors[curPlayer -1]) && curAction == "Deploy")){
+        	if(deployTerritories > 0){
+            	String numID = elementID.replaceAll("hex","hexnum");
+            	int curTerrs = (int) hexnumtable.get(numID);
+            	curTerrs++;
+            	String newpath = "/util/img/nums/" + curTerrs + ".png";
+ //           	System.out.println(newpath);
+            	replaceImage(numID,newpath);
+            	hexnumtable.put(numID, curTerrs);
+            	deployTerritories--;
+            	newpath = "/util/img/nums/" + deployTerritories + ".png";
+            	replaceImage("remainingTerritories",newpath);
+        	}
+        	//REPLACE REMAINING TERRS IMAGE
         }
     }
     private String[] getSurroundingTerritories(String elementID) {
@@ -120,24 +138,24 @@ public class MapScreen implements ScreenController {
             availibleHexes[4] = "hex" + Integer.toString(startingnum - mapHeight);
             availibleHexes[5] = "hex" + Integer.toString(startingnum - mapHeight +1);
         }
-        else if(startingnum % mapHeight == 1 && Math.ceil(startingnum/mapHeight) % 2 == 0){
+        else if(startingnum % mapHeight == 1 && Math.ceil(startingnum/mapHeight) % 2 == 1){
             availibleHexes[0] = "hex" + Integer.toString(startingnum + 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
             availibleHexes[2] = "hex" + Integer.toString(startingnum + mapHeight +1);
             availibleHexes[3] = "hex" + Integer.toString(startingnum - mapHeight);
-            availibleHexes[4] = "hex" + Integer.toString(startingnum - mapHeight -1);
+            availibleHexes[4] = "hex" + Integer.toString(startingnum - mapHeight +1);
         }
-        else if(startingnum % mapHeight == 1 && Math.ceil(startingnum/mapHeight) % 2 == 1){
+        else if(startingnum % mapHeight == 1 && Math.ceil(startingnum/mapHeight) % 2 == 0){
             availibleHexes[0] = "hex" + Integer.toString(startingnum + 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
             availibleHexes[2] = "hex" + Integer.toString(startingnum - mapHeight);
         }
-        else if(startingnum % mapHeight == 0 && Math.ceil(startingnum/mapHeight) % 2 == 0){
+        else if(startingnum % mapHeight == 0 && Math.ceil(startingnum/mapHeight) % 2 == 1){
             availibleHexes[0] = "hex" + Integer.toString(startingnum - 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
             availibleHexes[2] = "hex" + Integer.toString(startingnum - mapHeight);
         }
-        else if(startingnum % mapHeight == 0 && Math.ceil(startingnum/mapHeight) % 2 == 1){
+        else if(startingnum % mapHeight == 0 && Math.ceil(startingnum/mapHeight) % 2 == 0){
             availibleHexes[0] = "hex" + Integer.toString(startingnum - 1);
             availibleHexes[1] = "hex" + Integer.toString(startingnum + mapHeight);
             availibleHexes[2] = "hex" + Integer.toString(startingnum + mapHeight -1);
@@ -170,7 +188,8 @@ public class MapScreen implements ScreenController {
         lastHover = elementID;
         //System.out.println("mouseover");
     }
-    private void drawMap(){
+    public void drawMap(String myplayers){
+    	int players = Integer.parseInt(myplayers);
         Element map = screen.findElementByName("map");
         double colWidth = 13.9;
         int counter = 1;
@@ -178,13 +197,23 @@ public class MapScreen implements ScreenController {
             int depth = 1;
             while (depth <= mapHeight) {
                 int mycounter = counter;
-                int num = randInt(0, 4);
+                int num = randInt(0, players);
                 int num2 = randInt(0, 4);
                 double rowpos = i * colWidth;
                 double curdepth = depth;
+                
+
+                
                 new ImageBuilder() {
                     {
-                        filename(colors[num]);
+                        String path;
+                        if(num == players){
+                            path = "util/img/hexes/black.png";
+                       }
+                       else{
+                       	 path = colors[num];
+                       }
+						filename(path);
                         height("80");
                         width("95");
                         x(Double.toString(7.5 + rowpos) + "%");
@@ -194,7 +223,17 @@ public class MapScreen implements ScreenController {
                         interactOnMouseOver("hexMouseOver(hex" + mycounter + ")");
                     }
                 }.build(nifty, screen, map);
-                hextable.put("hex" + counter, colornames[num]);
+                
+
+                Object color;
+                if(num == players){
+                	 color = "black";
+                }
+                else{
+                	 color = colornames[num];
+                }
+                
+				hextable.put("hex" + counter, color);
                 new ImageBuilder() {
                     {
                         filename(nums[num2]);
@@ -221,14 +260,21 @@ public class MapScreen implements ScreenController {
         for (int i = 0; i < mapEvenCols; i++) {
             int depth = 1;
             while (depth <= mapHeight) {
-                int num = randInt(0, 4);
+                int num = randInt(0, players);
                 int num2 = randInt(0, 4);
                 int mycounter = counter;
                 double rowpos = i * colWidth;
                 double curdepth = depth;
                 new ImageBuilder() {
                     {
-                        filename(colors[num]);
+                    	String path;
+                        if(num == players){
+                            path = "util/img/hexes/black.png";
+                       }
+                       else{
+                       	 path = colors[num];
+                       }
+                        filename(path);
                         height("80");
                         width("95");
                         x(Double.toString(16.8 - 2.5 + rowpos) + "%");
@@ -238,7 +284,14 @@ public class MapScreen implements ScreenController {
                         interactOnMouseOver("hexMouseOver(hex" + mycounter + ")");
                     }
                 }.build(nifty, screen, map);
-                hextable.put("hex" + counter, colornames[num]);
+                Object color;
+                if(num == players){
+                	 color = "black";
+                }
+                else{
+                	 color = colornames[num];
+                }
+                hextable.put("hex" + counter, color);
                 new ImageBuilder() {
                     {
                         filename(nums[num2]);
@@ -260,6 +313,7 @@ public class MapScreen implements ScreenController {
                 depth++;
             }
         }
+		nifty.getCurrentScreen().findElementByName("transparent").hide();
     }
     private boolean attackTerritories(String attacker,String defender){
     	
@@ -269,7 +323,7 @@ public class MapScreen implements ScreenController {
     	int attackerUnits = (int) hexnumtable.get(attackerNumID);
     	int defenderUnits = (int) hexnumtable.get(defenderNumID);
     	
-    	System.out.println("ATTACK " + attacker + " - " + attackerUnits + " vs. " + defender + " - " + defenderUnits);
+ //   	System.out.println("ATTACK " + attacker + " - " + attackerUnits + " vs. " + defender + " - " + defenderUnits);
     	   	
     	while (attackerUnits > 0 && defenderUnits > 0){
     		int attackerRand = randInt(1,100);
@@ -287,7 +341,7 @@ public class MapScreen implements ScreenController {
     	
     	if(defenderUnits == 0){
     		
-    		System.out.println("Attacker Wins - " + attackerUnits);
+//    		System.out.println("Attacker Wins - " + attackerUnits);
     		
     		replaceImage(attackerNumID,"util/img/nums/0.png");
     		replaceImage(defenderNumID,"util/img/nums/" + attackerUnits + ".png");
@@ -300,7 +354,7 @@ public class MapScreen implements ScreenController {
     		hexnumtable.put(attackerNumID, 0);
     	}
     	else{
-    		System.out.println("Defender Wins - " + defenderUnits);
+ //   		System.out.println("Defender Wins - " + defenderUnits);
     		replaceImage(attackerNumID,"util/img/nums/0.png");
     		replaceImage(defenderNumID,"util/img/nums/" + defenderUnits + ".png");    		
     		hexnumtable.put(defenderNumID, defenderUnits);
@@ -326,7 +380,47 @@ public class MapScreen implements ScreenController {
     }
     
     public void nextButtonClick(){
-    	System.out.println("next button");
+    	if(curAction.equals("Select")){
+    		String color = colornames[curPlayer-1];
+        	String path = "/util/img/" + color + "deploy.png";
+        	replaceImage("turnImage",path);
+    		curAction = "Deploy";	
+    		deployTerritories = getDeployTroops(color);
+    		path = "/util/img/nums/" + deployTerritories + ".png";
+        	replaceImage("remainingTerritories",path);
+    		nifty.getCurrentScreen().findElementByName("remainingTerritories").show();
+    	}
+    	else if(curAction.equals("Deploy")){
+    		switchTurn();
+    		nifty.getCurrentScreen().findElementByName("remainingTerritories").hide();
+    	}
+    	
+}
+    
+    public void switchTurn(){
+    	if(curPlayer == maxPlayers){
+    		curPlayer = 1;
+    	}
+    	else{
+    		curPlayer++;
+    	}
+    	
+    	String color = colornames[curPlayer-1];
+    	String path = "/util/img/" + color + "attack.png";
+    	replaceImage("turnImage",path);
+    	
+		curAction = "Select";
+    }
+
+    public int getDeployTroops(String color){
+    	int count = 0;
+    	ArrayList<String> arr = new ArrayList<String>(hextable.values());
+    	for (String value : arr) {
+    		if(color.equals(value)){
+			count++;
+    		}
+    	}
+    	return (int) Math.floor(count/2);
     }
     
    

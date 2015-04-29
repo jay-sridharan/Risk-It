@@ -4,19 +4,16 @@
    <useControls filename="nifty-default-controls.xml" />
    <screen id="start" controller="StartScreen">
       <layer id="background" childLayout="center">
-         <image filename="util/img/menuTexture.png" />
+         <image height="768" width="1024" filename="util/img/menuTexture.png" />
       </layer>
-      <layer id="title" childLayout="vertical">
-         <image align="center" height="20%" width="80%" filename="util/img/title.png" />
-         <panel id="subactions" childLayout="absolute" marginTop="40%" height="13%">
-            <image align="left" height="100%" width="30%" x="0px" y="0px" filename="util/img/rules.png">
+      <layer id="title" childLayout="absolute">
+            <image align="left" height="60" width="180" x="2%" y="2%" filename="util/img/rules.png">
                <interact onClick="showRules()" />
             </image>
-            <image align="right" height="100%" width="30%" x="70%" y="0px" filename="util/img/exit.png">
+            <image align="right" height="60" width="120" x="87%" y="2%" filename="util/img/exit.png">
                <interact onClick="exitGame()" />
             </image>
-         </panel>
-         <image align="center" height="20%" width="80%" filename="util/img/start game.png" marginTop="5%">
+         <image align="center" height="12%" width="35%" filename="util/img/start.png" x="32%" y="85%">
             <interact onClick="startGame()" />
          </image>
       </layer>
@@ -43,12 +40,31 @@
       <layer id="map" childLayout="absolute"/>
       
          <layer id="buttons" childLayout="absolute">
-   <image height="80" width="95" x="1%" y="2%" filename="util/img/hexes/blue.png">
+   <image height="6%" width="10%" x="1%" y="2%" id="turnImage" filename="util/img/blueattack.png">
    </image>
-
-   <image height="6%" width="10%" x="87%" y="2%" filename="util/img/next.png">
+   <image height="56" width="52" x="48%" y="2%" id="remainingTerritories" filename="util/img/nums/0.png">
+   </image>
+   <image height="6%" width="10%" x="87%" y="2%" id="nextButton" filename="util/img/next.png">
                <interact onClick="nextButtonClick()" />
    </image>
    </layer>
+
+         <layer id="transparent" backgroundColor="#D1D1D1A7" childLayout="vertical">
+         <panel id="selectPlayers" childLayout="absolute">
+            <image filename="util/img/players.png" width="53%" x="23%" y="5%" height="20%" >
+            </image>
+            <image filename="util/img/player2.png" width="150" x="6%" y="30%" height="200" >
+               <interact onClick="drawMap(2)" />
+            </image>
+            <image filename="util/img/player3.png" width="200" x="37%" y="30%" height="200" >
+               <interact onClick="drawMap(3)" />
+            </image>
+            <image filename="util/img/player4.png" width="260" x="70%" y="30%" height="200" >
+			   <interact onClick="drawMap(4)" />
+			</image>
+         </panel>
+      </layer>
+   
+   
    </screen>
 </nifty>
