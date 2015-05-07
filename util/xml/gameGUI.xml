@@ -64,6 +64,11 @@
 			</image>
          </panel>
       </layer>
+      
+         <layer id="winLayer" backgroundColor="#D1D1D1A7" childLayout="vertical">
+       		  <image filename="util/img/bluewins.png" id="winImage" width="100%" height="100%" >
+			</image>
+      </layer>
    
    
    </screen>
