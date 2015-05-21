@@ -3,6 +3,9 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Random;
 
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -47,7 +50,7 @@ public class MapScreen implements ScreenController {
     private String[] clicked = new String[2];
     private int mapOddCols = 6;
     private int mapEvenCols = 6;
-    private int mapHeight = 8;
+    private int mapHeight = 7;
     private int deployTerritories = 0;
     
     
@@ -59,6 +62,7 @@ public class MapScreen implements ScreenController {
     }
     @Override
     public void onStartScreen() {
+    	   	
         clicked[0] = "";
         clicked[1] = "";
 		nifty.getCurrentScreen().findElementByName("remainingTerritories").hide();
@@ -360,7 +364,18 @@ public class MapScreen implements ScreenController {
         int hexHeight = 80;
      
         int leftPad = 87;
-        int topPad = 0;
+        int topPad = 20;
+        
+        
+        DisplayMode currentMode = Display.getDisplayMode();
+        
+        int mapCols = (int) Math.floor((currentMode.getWidth() - (2*leftPad)) / (hexWidth*3/4));
+        
+        mapEvenCols = (int) Math.floor(mapCols/2d);
+        mapOddCols = (int) Math.ceil(mapCols/2d);
+        mapHeight = (int) Math.floor(((currentMode.getHeight() * 0.94) - (2*topPad)) / hexHeight);
+        System.out.println("cols: " + mapCols + ", " + mapEvenCols + ", " + mapOddCols);
+
         int counter = 1;
         
         for (int i = 0; i < mapOddCols; i++) {
@@ -415,7 +430,7 @@ public class MapScreen implements ScreenController {
                     }
                 }.build(nifty, screen, map);
                 hexnumtable.put("hexnum" + counter, num2 + 1);
-                if(counter % 8 == 0){
+                if(counter % mapHeight == 0){
                     counter+=mapHeight +1;
                 }
                 else{
@@ -424,7 +439,7 @@ public class MapScreen implements ScreenController {
                 depth++;
             }
         }
-        counter = 9;
+        counter = mapHeight +1;
         for (int i = 0; i < mapEvenCols; i++) {
             int depth = 1;
             while (depth <= mapHeight) {
@@ -475,7 +490,7 @@ public class MapScreen implements ScreenController {
                     }
                 }.build(nifty, screen, map);
                 hexnumtable.put("hexnum" + counter, num2 + 1);
-                if(counter % 8 == 0){
+                if(counter % mapHeight == 0){
                     counter+=mapHeight +1;
                 }
                 else{
@@ -486,6 +501,8 @@ public class MapScreen implements ScreenController {
         }
         
 		nifty.getCurrentScreen().findElementByName("transparent").hide();
+        System.out.println("cols: " + mapCols + ", " + mapEvenCols + ", " + mapOddCols);
+
     }
     
    

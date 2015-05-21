@@ -4,7 +4,7 @@
    <useControls filename="nifty-default-controls.xml" />
    <screen id="start" controller="StartScreen">
       <layer id="background" childLayout="center">
-         <image height="768" width="1024" filename="util/img/menuTexture.png" />
+         <image width="100%" height="100%" filename="util/img/menuTexture.png" />
       </layer>
       <layer id="title" childLayout="absolute">
             <image align="left" height="60" width="180" x="2%" y="2%" filename="util/img/rules.png">

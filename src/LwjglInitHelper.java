@@ -79,20 +79,22 @@ public class LwjglInitHelper {
     int height = 1200;
     try {
       DisplayMode currentMode = Display.getDisplayMode();
-      log.fine("currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", " + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
+      System.out.println("currentmode: " + currentMode.getWidth() + ", " + currentMode.getHeight() + ", " + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
 
-      width = currentMode.getWidth();
-      height = currentMode.getHeight();
+      width = (int) (currentMode.getWidth() * 0.997);
+      height = (int) (currentMode.getHeight() - 75);
+      System.out.println("modifiedmode: " + width + ", " + height + ", " + currentMode.getBitsPerPixel() + ", " + currentMode.getFrequency());
+      Display.setDisplayMode(new DisplayMode(width,height));
 
       //  get available modes, and print out
-      DisplayMode[] modes = Display.getAvailableDisplayModes();
-      log.fine("Found " + modes.length + " display modes");
+      /*DisplayMode[] modes = Display.getAvailableDisplayModes();
+      System.out.println("Found " + modes.length + " display modes");
 
       List < DisplayMode > matching = new ArrayList < DisplayMode >();
       for (int i = 0; i < modes.length; i++) {
         DisplayMode mode = modes[i];
         if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT && mode.getBitsPerPixel() == 32 ) {
-          log.fine(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
+        	System.out.println(mode.getWidth() + ", " + mode.getHeight() + ", " + mode.getBitsPerPixel() + ", " + mode.getFrequency());
           matching.add(mode);
         }
       }
@@ -103,7 +105,7 @@ public class LwjglInitHelper {
       boolean found = false;
       for (int i = 0; i < matchingModes.length; i++) {
         if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
-          log.fine("using mode: " + matchingModes[i].getWidth() + ", "
+          System.out.println("using mode: " + matchingModes[i].getWidth() + ", "
               + matchingModes[i].getHeight() + ", "
               + matchingModes[i].getBitsPerPixel() + ", "
               + matchingModes[i].getFrequency());
@@ -127,18 +129,17 @@ public class LwjglInitHelper {
         });
 
         for (int i = 0; i < matchingModes.length; i++) {
-          log.fine("using fallback mode: " + matchingModes[i].getWidth() + ", "
+          System.out.println("using fallback mode: " + matchingModes[i].getWidth() + ", "
               + matchingModes[i].getHeight() + ", "
               + matchingModes[i].getBitsPerPixel() + ", "
               + matchingModes[i].getFrequency());
           Display.setDisplayMode(matchingModes[i]);
           break;
         }
-      }
+      }*/
 
-      int x = (width - Display.getDisplayMode().getWidth()) / 2;
-      int y = (height - Display.getDisplayMode().getHeight()) / 2;
-      Display.setLocation(x, y);
+      
+      Display.setLocation(0,0);
 
       // Create the actual window
       try {
@@ -168,7 +169,7 @@ public class LwjglInitHelper {
       if (extensions != null) {
         String[] ext = extensions.split(" ");
         for (int i = 0; i < ext.length; i++) {
-          log.fine("opengl extensions: " + ext[i]);
+          System.out.println("opengl extensions: " + ext[i]);
         }
       }
 
@@ -201,7 +202,7 @@ public class LwjglInitHelper {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
       return true;
-    } catch (LWJGLException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
@@ -237,7 +238,7 @@ public class LwjglInitHelper {
         callback.process();
       }
       
-     // show render
+     // show renderd
       Display.update();
 
       if (nifty.update()) {
